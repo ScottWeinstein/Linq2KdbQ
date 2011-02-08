@@ -1,4 +1,4 @@
-﻿#A LINQ to Kdb+/Q Provider
+﻿# A LINQ to Kdb+/Q Provider
 
 [General info](http://weblogs.asp.net/sweinstein/archive/tags/Kdb_2B00_/default.aspx)
 
