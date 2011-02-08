@@ -1,0 +1,56 @@
+﻿<#+
+public class KdbFlipTemplate : Template
+{
+	public string BaseName {get;set;}
+	public string RowClassName { get { return BaseName+"Record"; } }
+	public string ClassName { get { return BaseName+"Flip"; } }
+	public string Namespace { get; set; }
+	public Kdbplus.Flip TableMeta {get;set;}
+	protected override void RenderCore()
+	{#>
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Kdbplus;
+using System.Diagnostics;
+namespace <#= this.Namespace #>
+{
+
+public class <#= RowClassName #>{
+        <#+ 
+        for (int rowIdx = 0; rowIdx < Kdbplus.Type.Length(TableMeta.TheColumnValues[0]); rowIdx++)
+        {
+            var colName = ((string[])(TableMeta.TheColumnValues[0]))[rowIdx];
+            var colTypeCode = ((char[])(TableMeta.TheColumnValues[1]))[rowIdx];
+            var colType = GetKdbTypeFromCharCode(colTypeCode);
+        #> public <#= colType.FullName #> @<#= colName #> {get;set;}
+	<#+ } #>
+}
+}	
+<#+
+}
+    public System.Type GetKdbTypeFromCharCode(char ch)
+    {
+        switch (ch)
+        {
+            case 'x': return typeof(byte);
+            case 'h': return typeof(Int16);
+            case 'i': return typeof(Int32);
+            case 'j': return typeof(Int64);
+            case 'e': return typeof(Single);
+            case 'f': return typeof(double);
+            case 'c': return typeof(char);
+            case 's': return typeof(string);
+            case 'm': return typeof(Kdbplus.Month);
+            case 'd': return typeof(Kdbplus.Date);
+            case 'z': return typeof(DateTime);
+            case 'u': return typeof(Kdbplus.Minute);
+            case 'v': return typeof(Kdbplus.Second);
+            case 't': return typeof(TimeSpan);
+            default:
+                throw new ArgumentException("unknown or unsupported char type '" + ch + "'");
+        }
+    }
+}
+#>

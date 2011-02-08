@@ -1,0 +1,35 @@
+﻿<#+
+public class KdbContextTemplate : Template
+{
+	public string ContextName {get;set;}
+	public List<string> RowClasses = new List<string>();
+	public string Namespace { get; set; }
+	protected override void RenderCore()
+	{#>
+using System.IO;
+using IQ;
+using Kdbplus;
+using Kdbplus.Linq;
+namespace <#= this.Namespace #>
+{
+	public class <#= ContextName #>:KdbContext
+	{
+        <#+ 
+        foreach (string rowClass in RowClasses)
+        {
+        #>public Query<<#= rowClass #>> <#= rowClass #> {get;private set;}
+        <#+ } #> 
+		public <#= ContextName #>(IConnection connection):this(connection,null) {}
+        public <#= ContextName #>(IConnection connection, TextWriter log):base(connection,log)
+        {
+        <#+ 
+        foreach (string rowClass in RowClasses)
+        {#><#= rowClass #> = new Query<<#= rowClass #>>(Provider);
+        <#+ } #> 
+		}
+	}
+}
+<#+
+}
+}
+#>

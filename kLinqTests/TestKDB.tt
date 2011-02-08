@@ -1,0 +1,10 @@
+﻿<#@ template language="C#v3.5" hostspecific="True" debug="True" #>
+<#@ include file="KdbContextGen.tt" #>
+<#
+ 	var gen = new KdbContextGen();
+ 	gen.Namespace="KLinqTests";
+	gen.Host = "localhost";
+	gen.Port = 5001;
+	gen.ContextName ="TestKdbContext";
+	gen.Run(); 
+#>
